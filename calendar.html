@@ -51,24 +51,24 @@
                 <div class="calendar-day">Sat</div>
             </div>
             <div id="calendar-days" class="calendar-grid">
-                <!-- Calendar days will be populated here -->
+                
             </div>
         </div>
 
         <div class="mt-2">
             <h3>Upcoming This Month</h3>
             <div id="monthly-events" class="grid grid-2">
-                <!-- Monthly events will be shown here -->
+                
             </div>
         </div>
     </main>
 
-    <!-- Day Events Modal -->
+
     <div id="day-events-modal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="hideModal('day-events')">&times;</button>
             <div id="day-events-content">
-                <!-- Day events will be populated here -->
+                
             </div>
         </div>
     </div>
@@ -92,18 +92,18 @@
 
     <script src="script.js"></script>
     <script>
-        // Calendar specific variables
+        
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
 
-        // Initialize calendar page
+    
         document.addEventListener('DOMContentLoaded', function () {
             renderCalendar();
             renderMonthlyEvents();
         });
 
         function renderMonthlyEvents() {
-            // Filter events for current month
+
             const monthEvents = sampleEvents.filter(event => {
                 const eventDate = new Date(event.date);
                 return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
@@ -171,5 +171,6 @@
         }
     </script>
 </body>
+
 
 </html>
