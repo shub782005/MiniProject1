@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Admin Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #0d6efd;
+            color: white;
+            padding: 1rem;
+        }
+
+        header nav.container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header nav a.logo {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-actions {
+            color: white;
+        }
+
+        .nav-actions button {
+            margin-left: 1rem;
+            background: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        main.container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            flex: 1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 2rem;
+            color: #0d6efd;
+        }
+
+        .stat-card p {
+            margin: 0.5rem 0 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .tabs {
+            margin-top: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            background: #e9ecef;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .admin-tab {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .admin-tab.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        thead tr {
+            background: #0d6efd;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        tbody tr:hover {
+            background: #f1f1f1;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-primary {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .btn-success {
+            background: #198754;
+            color: white;
+        }
+
+        /* Overlap Warning Box */
+        #overlap-warning {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #ffc107;
+            border-radius: 8px;
+            color: #856404;
+            display: none;
+        }
+
+        /* Event Form Styles */
+        #event-form {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        #event-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        #event-form input,
+        #event-form select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <span>Admin Panel</span>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Admin Dashboard</h1>
+            <p>Manage your platform efficiently and avoid event overlaps</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="admin-users">0</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-bookings">0</h3>
+                <p>Total Bookings</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-events">0</h3>
+                <p>Active Events</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-revenue">₹0</h3>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showAdminTab('users')">User Management</button>
+            <button class="tab-btn" onclick="showAdminTab('events-mgmt')">Event Management</button>
+            <button class="tab-btn" onclick="showAdminTab('transactions')">Transactions</button>
+            <button class="tab-btn" onclick="showAdminTab('settings')">Settings</button>
+        </div>
+
+        <!-- User Management Tab -->
+        <div id="admin-users-tab" class="admin-tab active">
+            <h3>User Management</h3>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-list">
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>2024-01-15</td>
+                            <td><button class="btn btn-secondary" onclick="editUser(1)">Edit</button> <button
+                                    class="btn btn-danger" onclick="deleteUser(1)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>2024-02-20</td>
+                            <td><button class="btn btn-secondary" onclick="editUser(2)">Edit</button> <button
+                                    class="btn btn-danger" onclick="deleteUser(2)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Event Management Tab -->
+        <div id="admin-events-mgmt-tab" class="admin-tab">
+            <h3>Event Management - Avoid Overlapping Events</h3>
+
+            <!-- New Event Form -->
+            <form id="event-form" onsubmit="addOrUpdateEvent(event)">
+                <input type="hidden" id="event-id" />
+                <label for="event-title">Title *</label>
+                <input type="text" id="event-title" required />
+                <label for="event-start-date">Start Date & Time *</label>
+                <input type="datetime-local" id="event-start-date" required />
+                <label for="event-end-date">End Date & Time *</label>
+                <input type="datetime-local" id="event-end-date" required />
+                <label for="event-location">Location *</label>
+                <input type="text" id="event-location" required />
+                <button class="btn btn-primary" type="submit">Save Event</button>
+                <div id="overlap-warning">Warning: This event overlaps with one or more existing events!</div>
+            </form>
+
+            <div class="card" style="margin-top:20px;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-events-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div id="admin-transactions-tab" class="admin-tab">
+            <h3>Transactions & Revenue</h3>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>User</th>
+                            <th>Event</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-transactions-list">
+                        <tr>
+                            <td>#TXN001</td>
+                            <td>john@example.com</td>
+                            <td>Summer Music Festival</td>
+                            <td>₹1,650</td>
+                            <td>2024-06-15</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>#TXN002</td>
+                            <td>jane@example.com</td>
+                            <td>Art Exhibition</td>
+                            <td>₹550</td>
+                            <td>2024-06-18</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>#TXN003</td>
+                            <td>mike@example.com</td>
+                            <td>Comedy Night</td>
+                            <td>₹330</td>
+                            <td>2024-06-20</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="admin-settings-tab" class="admin-tab">
+            <h3>Platform Settings</h3>
+            <div class="card">
+                <label>Event Categories</label>
+                <div id="categories-list" style="margin-bottom:10px;">
+                    <span class="btn btn-secondary" style="margin-right:5px;">Music</span>
+                    <span class="btn btn-secondary" style="margin-right:5px;">Art</span>
+                    <span class="btn btn-secondary" style="margin-right:5px;">Dance</span>
+                    <span class="btn btn-secondary" style="margin-right:5px;">Comedy</span>
+                    <span class="btn btn-secondary" style="margin-right:5px;">Workshop</span>
+                </div>
+                <button class="btn btn-secondary" onclick="addCategory()">Add Category</button>
+            </div>
+            <div class="card" style="margin-top:20px;">
+                <label>Available Locations</label>
+                <div id="locations-list" style="margin-bottom:10px;">
+                    <p>• Pune</p>
+                    <p>• Mumbai</p>
+                    <p>• Kolhapur</p>
+                    <p>• Online</p>
+                </div>
+                <button class="btn btn-secondary" onclick="addLocation()">Add Location</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentEvents = [
+            {
+                id: 1,
+                title: "Summer Music Festival",
+                start: "2024-07-15T18:00",
+                end: "2024-07-15T22:00",
+                location: "Mumbai"
+            },
+            {
+                id: 2,
+                title: "Art Exhibition",
+                start: "2024-07-20T10:00",
+                end: "2024-07-20T17:00",
+                location: "Pune"
+            }
+        ];
+
+        // Helper: Render Admin Stats
+        function updateAdminStats() {
+            document.getElementById("admin-users").textContent = "247";
+            document.getElementById("admin-bookings").textContent = "1,832";
+            document.getElementById("admin-events").textContent = currentEvents.length;
+            document.getElementById("admin-revenue").textContent = "₹2,45,670";
+        }
+
+        // Helper: Show Tab
+        function showAdminTab(tabName) {
+            document.querySelectorAll(".admin-tab").forEach(tab => tab.classList.remove("active"));
+            document.getElementById(`admin-${tabName}-tab`).classList.add("active");
+            document.querySelectorAll(".tabs .tab-btn").forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+        }
+
+        // Render Events List in Table
+        function renderEvents() {
+            const tbody = document.getElementById("admin-events-list");
+            tbody.innerHTML = "";
+            currentEvents.forEach(event => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+        <td>${event.title}</td>
+        <td>${event.start.replace('T', ' ')}</td>
+        <td>${event.end.replace('T', ' ')}</td>
+        <td>${event.location}</td>
+        <td>
+          <button class="btn btn-secondary" onclick="editEvent(${event.id})">Edit</button> 
+          <button class="btn btn-danger" onclick="deleteEvent(${event.id})">Delete</button>
+        </td>
+      `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Check for overlapping events
+        function checkOverlap(newStart, newEnd, location, excludeId = null) {
+            let overlapEvents = currentEvents.filter(ev => {
+                if (excludeId !== null && ev.id === excludeId) return false;
+                if (ev.location.toLowerCase() !== location.toLowerCase()) return false;
+                return !(newEnd <= ev.start || newStart >= ev.end);
+            });
+            return overlapEvents.length > 0;
+        }
+
+        // Add or Update event form submit handler
+        function addOrUpdateEvent(e) {
+            e.preventDefault();
+            const idField = document.getElementById("event-id");
+            const title = document.getElementById("event-title").value.trim();
+            const start = document.getElementById("event-start-date").value;
+            const end = document.getElementById("event-end-date").value;
+            const location = document.getElementById("event-location").value.trim();
+            const overlapWarning = document.getElementById("overlap-warning");
+
+            if (new Date(start) >= new Date(end)) {
+                alert("End date/time must be after start date/time.");
+                return;
+            }
+            if (checkOverlap(start, end, location, idField.value ? Number(idField.value) : null)) {
+                overlapWarning.style.display = "block";
+                return;
+            } else {
+                overlapWarning.style.display = "none";
+            }
+
+            if (idField.value) {
+                // Update existing event
+                let index = currentEvents.findIndex(ev => ev.id === Number(idField.value));
+                if (index !== -1) {
+                    currentEvents[index].title = title;
+                    currentEvents[index].start = start;
+                    currentEvents[index].end = end;
+                    currentEvents[index].location = location;
+                }
+                alert("Event updated successfully!");
+            } else {
+                // Add new event
+                const newEvent = {
+                    id: Date.now(),
+                    title,
+                    start,
+                    end,
+                    location
+                };
+                currentEvents.push(newEvent);
+                alert("Event added successfully!");
+            }
+
+            // Reset form
+            e.target.reset();
+            idField.value = "";
+            overlapWarning.style.display = "none";
+            renderEvents();
+            updateAdminStats();
+        }
+
+        // Edit event pre-fills form
+        function editEvent(id) {
+            const event = currentEvents.find(ev => ev.id === id);
+            if (!event) return;
+            document.getElementById("event-id").value = event.id;
+            document.getElementById("event-title").value = event.title;
+            document.getElementById("event-start-date").value = event.start;
+            document.getElementById("event-end-date").value = event.end;
+            document.getElementById("event-location").value = event.location;
+            document.getElementById("overlap-warning").style.display = "none";
+        }
+
+        // Delete event handler
+        function deleteEvent(id) {
+            if (confirm("Are you sure you want to delete this event?")) {
+                currentEvents = currentEvents.filter(ev => ev.id !== id);
+                renderEvents();
+                updateAdminStats();
+            }
+        }
+
+        // Dummy user and transaction management functions (same functionality)
+        function editUser(userId) { alert(`Edit user: ${userId}`); }
+        function deleteUser(userId) { if (confirm("Delete user?")) alert(`Deleted user: ${userId}`); }
+        function addCategory() { let cat = prompt("New Category:"); if (cat) alert(`Add category: ${cat}`); }
+        function addLocation() { let loc = prompt("New Location:"); if (loc) alert(`Add location: ${loc}`); }
+
+        // Theme toggle (simple)
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+        // Logout
+        function logout() {
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'home.html';
+        }
+
+        // Initialize admin dashboard
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check admin authorization (dummy check)
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!user.role || user.role !== 'admin') {
+                alert("Access denied. Admin privileges required.");
+                window.location.href = "login.html";
+                return;
+            }
+            showAdminTab('users');
+            updateAdminStats();
+            renderEvents();
+        });
+    </script>
+
+</body>
+
+</html>

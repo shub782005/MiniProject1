@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html" class="active">Calendar</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="btn btn-secondary" onclick="window.location.href='login.html'">Login</button>
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Event Calendar</h1>
+            <p>Browse events by date and plan your schedule</p>
+        </div>
+
+        <div class="calendar">
+            <div class="calendar-header">
+                <button onclick="previousMonth()">&lt;</button>
+                <span id="calendar-month-year">November 2024</span>
+                <button onclick="nextMonth()">&gt;</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="calendar-day">Sun</div>
+                <div class="calendar-day">Mon</div>
+                <div class="calendar-day">Tue</div>
+                <div class="calendar-day">Wed</div>
+                <div class="calendar-day">Thu</div>
+                <div class="calendar-day">Fri</div>
+                <div class="calendar-day">Sat</div>
+            </div>
+            <div id="calendar-days" class="calendar-grid">
+                <!-- Calendar days will be populated here -->
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <h3>Upcoming This Month</h3>
+            <div id="monthly-events" class="grid grid-2">
+                <!-- Monthly events will be shown here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Day Events Modal -->
+    <div id="day-events-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('day-events')">&times;</button>
+            <div id="day-events-content">
+                <!-- Day events will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elysian Spectacle</h4>
+                    <p>Connecting audiences with unforgettable cultural experiences worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <p><a href="events.html">Browse Events</a></p>
+                    <p><a href="artists.html">Meet Artists</a></p>
+                    <p><a href="host-event.html">Host Event</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Calendar specific variables
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Initialize calendar page
+        document.addEventListener('DOMContentLoaded', function () {
+            renderCalendar();
+            renderMonthlyEvents();
+        });
+
+        function renderMonthlyEvents() {
+            // Filter events for current month
+            const monthEvents = sampleEvents.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+            });
+
+            const container = document.getElementById('monthly-events');
+            if (monthEvents.length === 0) {
+                container.innerHTML = '<p class="text-center">No events this month</p>';
+                return;
+            }
+
+            const eventsHTML = monthEvents.map(event => `
+                <div class="event-card">
+                    <div class="event-image">${event.title.charAt(0).toUpperCase()}</div>
+                    <div class="event-content">
+                        <div class="event-date">${formatDate(event.date)} • ${event.time}</div>
+                        <h3 class="event-title">${event.title}</h3>
+                        <div class="event-location">📍 ${event.location}</div>
+                        <button class="btn btn-primary mt-1" onclick="showEventDetails(${event.id})">View Details</button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.innerHTML = eventsHTML;
+        }
+
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+            renderMonthlyEvents();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+            renderMonthlyEvents();
+        }
+
+        function showDayEvents(date) {
+            const dayEvents = sampleEvents.filter(event => event.date === date);
+            if (dayEvents.length === 0) return;
+
+            let content = `<h3>Events on ${formatDate(date)}</h3>`;
+            dayEvents.forEach(event => {
+                content += `
+                    <div class="card mt-1">
+                        <h4>${event.title}</h4>
+                        <p>${event.time} • ${event.location}</p>
+                        <p>₹${event.price}</p>
+                        <button class="btn btn-primary" onclick="hideModal('day-events'); showEventDetails(${event.id})">View Details</button>
+                    </div>
+                `;
+            });
+
+            document.getElementById('day-events-content').innerHTML = content;
+            showModal('day-events');
+        }
+    </script>
+</body>
+
+</html>

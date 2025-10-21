@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Events</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html" class="active">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="btn btn-secondary" onclick="window.location.href='login.html'">Login</button>
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Upcoming Events</h1>
+            <p>Discover amazing events happening around you</p>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterEvents('all')">All</button>
+                <button class="filter-btn" onclick="filterEvents('music')">Music</button>
+                <button class="filter-btn" onclick="filterEvents('art')">Art</button>
+                <button class="filter-btn" onclick="filterEvents('dance')">Dance</button>
+                <button class="filter-btn" onclick="filterEvents('comedy')">Comedy</button>
+                <button class="filter-btn" onclick="filterEvents('workshop')">Workshop</button>
+            </div>
+        </div>
+
+        <div class="loading" id="events-loading">
+            <div class="spinner"></div>
+            Loading events...
+        </div>
+
+        <div id="events-container">
+            <p id="events-count">Showing 0 events</p>
+            <div id="events-grid" class="grid grid-3">
+                <!-- Events will be populated here -->
+            </div>
+        </div>
+
+        <div class="text-center mt-2">
+            <button class="btn btn-primary" onclick="window.location.href='host-event.html'">Host Your Event</button>
+        </div>
+    </main>
+
+    <!-- Event Details Modal -->
+    <div id="event-details-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('event-details')">&times;</button>
+            <div id="event-details-content">
+                <!-- Event details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('payment')">&times;</button>
+            <h2>Complete Your Payment</h2>
+            <p>This is a simulated payment process for demonstration purposes.</p>
+
+            <div class="payment-summary" id="payment-summary">
+                <!-- Payment summary will be populated here -->
+            </div>
+
+            <form class="payment-form" onsubmit="processPayment(event)">
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" class="form-control card-input" placeholder="1234 5678 9012 3456" maxlength="19"
+                        required>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" class="form-control" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success">Complete Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elysian Spectacle</h4>
+                    <p>Connecting audiences with unforgettable cultural experiences worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <p><a href="events.html">Browse Events</a></p>
+                    <p><a href="artists.html">Meet Artists</a></p>
+                    <p><a href="host-event.html">Host Event</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize events page
+        document.addEventListener('DOMContentLoaded', function () {
+            renderEvents();
+            setTimeout(() => {
+                document.getElementById('events-loading').style.display = 'none';
+                document.getElementById('events-container').style.display = 'block';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

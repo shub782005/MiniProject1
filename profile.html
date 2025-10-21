@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <span id="user-greeting">Hello, User!</span>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Your Profile</h1>
+            <p>Manage your account and view your bookings</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h3>Personal Information</h3>
+                <div id="profile-alerts"></div>
+
+                <form id="profile-form" onsubmit="updateProfile(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profile-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="profile-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="profile-phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <select id="profile-location" class="form-control">
+                            <option value="">Select your location</option>
+                            <option value="pune">Pune</option>
+                            <option value="mumbai">Mumbai</option>
+                            <option value="kolhapur">Kolhapur</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Account Settings</h3>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="email-notifications">
+                        Email notifications for new events
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="sms-notifications">
+                        SMS reminders for booked events
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="newsletter">
+                        Subscribe to our newsletter
+                    </label>
+                </div>
+                <button class="btn btn-secondary" onclick="updateSettings()">Save Settings</button>
+
+                <hr class="mt-2 mb-2">
+
+                <h4>Change Password</h4>
+                <form onsubmit="changePassword(event)">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <h3>Your Bookings</h3>
+            <div id="user-bookings">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading your bookings...
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <h3>Booking History</h3>
+            <div id="booking-history">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booking-history-list">
+                        <tr>
+                            <td colspan="5" class="text-center">No bookings found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elysian Spectacle</h4>
+                    <p>Connecting audiences with unforgettable cultural experiences worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize profile page
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || '{}');
+
+            if (!user.email) {
+                alert('Please login to access your profile.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            loadUserProfile(user);
+            loadUserBookings(user);
+            setTimeout(() => {
+                document.querySelector('#user-bookings .loading').style.display = 'none';
+                document.querySelector('#user-bookings').innerHTML = '<p>No current bookings found.</p>';
+            }, 2000);
+        });
+
+        function loadUserProfile(user) {
+            document.getElementById('user-greeting').textContent = `Hello, ${user.name || 'User'}!`;
+            document.getElementById('profile-name').value = user.name || '';
+            document.getElementById('profile-email').value = user.email || '';
+            document.getElementById('profile-phone').value = user.phone || '';
+            document.getElementById('profile-location').value = user.location || '';
+
+            // Load settings
+            document.getElementById('email-notifications').checked = user.emailNotifications !== false;
+            document.getElementById('sms-notifications').checked = user.smsNotifications === true;
+            document.getElementById('newsletter').checked = user.newsletter === true;
+        }
+
+        function loadUserBookings(user) {
+            // Sample booking data for demonstration
+            const sampleBookings = [
+                {
+                    id: 1,
+                    event: 'Summer Music Festival',
+                    date: '2024-07-15',
+                    amount: 1650,
+                    status: 'Confirmed',
+                    bookingDate: '2024-06-15'
+                },
+                {
+                    id: 2,
+                    event: 'Art Exhibition',
+                    date: '2024-07-20',
+                    amount: 550,
+                    status: 'Confirmed',
+                    bookingDate: '2024-06-18'
+                }
+            ];
+
+            const tbody = document.getElementById('booking-history-list');
+            if (sampleBookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No bookings found</td></tr>';
+                return;
+            }
+
+            const bookingsHTML = sampleBookings.map(booking => `
+                <tr>
+                    <td>${booking.event}</td>
+                    <td>${formatDate(booking.date)}</td>
+                    <td>₹${booking.amount}</td>
+                    <td><span class="btn btn-success">${booking.status}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="viewTicket(${booking.id})">View Ticket</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            tbody.innerHTML = bookingsHTML;
+        }
+
+        function updateProfile(e) {
+            e.preventDefault();
+
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || '{}');
+
+            // Update user data
+            user.name = document.getElementById('profile-name').value;
+            user.email = document.getElementById('profile-email').value;
+            user.phone = document.getElementById('profile-phone').value;
+            user.location = document.getElementById('profile-location').value;
+
+            // Save updated user data
+            if (localStorage.getItem('currentUser')) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            } else {
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+
+            showAlert('Profile updated successfully!', 'success');
+            document.getElementById('user-greeting').textContent = `Hello, ${user.name}!`;
+        }
+
+        function updateSettings() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || '{}');
+
+            user.emailNotifications = document.getElementById('email-notifications').checked;
+            user.smsNotifications = document.getElementById('sms-notifications').checked;
+            user.newsletter = document.getElementById('newsletter').checked;
+
+            // Save settings
+            if (localStorage.getItem('currentUser')) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            } else {
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+
+            showAlert('Settings updated successfully!', 'success');
+        }
+
+        function changePassword(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const currentPassword = e.target.querySelector('input[type="password"]').value;
+            const newPassword = e.target.querySelectorAll('input[type="password"]')[1].value;
+            const confirmPassword = e.target.querySelectorAll('input[type="password"]')[2].value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert('New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showAlert('Password must be at least 6 characters long', 'error');
+                return;
+            }
+
+            // In a real app, this would be validated against the server
+            showAlert('Password changed successfully!', 'success');
+            e.target.reset();
+        }
+
+        function viewTicket(bookingId) {
+            alert(`Ticket details for booking #${bookingId} would be displayed here. This would include QR code, event details, and booking information.`);
+        }
+
+        function showAlert(message, type) {
+            const alertsDiv = document.getElementById('profile-alerts');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertsDiv.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'home.html';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    </script>
+</body>
+
+</html>

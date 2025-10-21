@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="admin.html" class="active">Admin</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <span>Admin Panel</span>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Admin Dashboard</h1>
+            <p>Manage your platform efficiently</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="admin-users">0</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-bookings">0</h3>
+                <p>Total Bookings</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-events">0</h3>
+                <p>Active Events</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="admin-revenue">₹0</h3>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showAdminTab('users')">User Management</button>
+            <button class="tab-btn" onclick="showAdminTab('events-mgmt')">Event Management</button>
+            <button class="tab-btn" onclick="showAdminTab('transactions')">Transactions</button>
+            <button class="tab-btn" onclick="showAdminTab('settings')">Settings</button>
+        </div>
+
+        <div id="admin-users-tab" class="admin-tab active">
+            <h3>User Management</h3>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-list">
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>2024-01-15</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editUser(1)">Edit</button>
+                                <button class="btn btn-danger" onclick="deleteUser(1)">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>2024-02-20</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editUser(2)">Edit</button>
+                                <button class="btn btn-danger" onclick="deleteUser(2)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="admin-events-mgmt-tab" class="admin-tab">
+            <h3>Event Management</h3>
+            <div class="card">
+                <div class="mb-2">
+                    <button class="btn btn-primary" onclick="window.location.href='host-event.html'">Add New
+                        Event</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Bookings</th>
+                            <th>Revenue</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-events-list">
+                        <tr>
+                            <td>Summer Music Festival</td>
+                            <td>2024-07-15</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>1250/5000</td>
+                            <td>₹18,75,000</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editEvent(1)">Edit</button>
+                                <button class="btn btn-danger" onclick="cancelEvent(1)">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Art Exhibition</td>
+                            <td>2024-07-20</td>
+                            <td><span class="btn btn-success">Active</span></td>
+                            <td>87/200</td>
+                            <td>₹43,500</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editEvent(2)">Edit</button>
+                                <button class="btn btn-danger" onclick="cancelEvent(2)">Cancel</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="admin-transactions-tab" class="admin-tab">
+            <h3>Transactions & Revenue</h3>
+            <div class="card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>User</th>
+                            <th>Event</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-transactions-list">
+                        <tr>
+                            <td>#TXN001</td>
+                            <td>john@example.com</td>
+                            <td>Summer Music Festival</td>
+                            <td>₹1,650</td>
+                            <td>2024-06-15</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>#TXN002</td>
+                            <td>jane@example.com</td>
+                            <td>Art Exhibition</td>
+                            <td>₹550</td>
+                            <td>2024-06-18</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>#TXN003</td>
+                            <td>mike@example.com</td>
+                            <td>Comedy Night</td>
+                            <td>₹330</td>
+                            <td>2024-06-20</td>
+                            <td><span class="btn btn-success">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="admin-settings-tab" class="admin-tab">
+            <h3>Platform Settings</h3>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h4>Event Categories</h4>
+                    <div id="categories-list" class="mb-2">
+                        <span class="filter-btn">Music</span>
+                        <span class="filter-btn">Art</span>
+                        <span class="filter-btn">Dance</span>
+                        <span class="filter-btn">Comedy</span>
+                        <span class="filter-btn">Workshop</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addCategory()">Add Category</button>
+                </div>
+                <div class="card">
+                    <h4>Available Locations</h4>
+                    <div id="locations-list" class="mb-2">
+                        <p>• Pune</p>
+                        <p>• Mumbai</p>
+                        <p>• Kolhapur</p>
+                        <p>• Online</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addLocation()">Add Location</button>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <h4>Platform Configuration</h4>
+                <form onsubmit="updateSettings(event)">
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Platform Fee (%)</label>
+                            <input type="number" class="form-control" value="10" min="0" max="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Max Events Per User</label>
+                            <input type="number" class="form-control" value="5" min="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Platform Email</label>
+                        <input type="email" class="form-control" value="info@elysianspectacle.com">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Settings</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="text-center">
+                <p>&copy; 2024 Elysian Spectacle Admin Panel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', function () {
+            updateAdminStats();
+
+            // Check if user is admin
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || '{}');
+            if (!currentUser.role || currentUser.role !== 'admin') {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = 'login.html';
+            }
+        });
+
+        function showAdminTab(tabName) {
+            // Hide all admin tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected admin tab
+            document.getElementById(`admin-${tabName}-tab`).classList.add('active');
+
+            // Update admin tab buttons
+            document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function updateAdminStats() {
+            document.getElementById('admin-users').textContent = '247';
+            document.getElementById('admin-bookings').textContent = '1,832';
+            document.getElementById('admin-events').textContent = '28';
+            document.getElementById('admin-revenue').textContent = '₹2,45,670';
+        }
+
+        function editUser(userId) {
+            alert(`Edit user functionality would be implemented here for user ID: ${userId}`);
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                alert(`User ${userId} deleted successfully`);
+            }
+        }
+
+        function editEvent(eventId) {
+            alert(`Edit event functionality would be implemented here for event ID: ${eventId}`);
+        }
+
+        function cancelEvent(eventId) {
+            if (confirm('Are you sure you want to cancel this event?')) {
+                alert(`Event ${eventId} cancelled successfully`);
+            }
+        }
+
+        function addCategory() {
+            const category = prompt('Enter new category name:');
+            if (category) {
+                const categoriesDiv = document.getElementById('categories-list');
+                const newCategory = document.createElement('span');
+                newCategory.className = 'filter-btn';
+                newCategory.textContent = category;
+                categoriesDiv.appendChild(newCategory);
+            }
+        }
+
+        function addLocation() {
+            const location = prompt('Enter new location:');
+            if (location) {
+                const locationsDiv = document.getElementById('locations-list');
+                const newLocation = document.createElement('p');
+                newLocation.textContent = `• ${location}`;
+                locationsDiv.appendChild(newLocation);
+            }
+        }
+
+        function updateSettings(e) {
+            e.preventDefault();
+            alert('Settings updated successfully!');
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'home.html';
+        }
+    </script>
+</body>
+
+</html>

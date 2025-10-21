@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Host Event</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="btn btn-secondary" onclick="window.location.href='login.html'">Login</button>
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="hero">
+            <h1>Host Your Event</h1>
+            <p>Share your amazing event with our community</p>
+        </div>
+
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="card">
+                <h2>Event Information</h2>
+                <p>Fill out the form below to submit your event for inclusion on our platform.</p>
+
+                <div id="host-alerts"></div>
+
+                <form id="host-event-form" onsubmit="submitEvent(event)">
+                    <div class="form-group">
+                        <label>Event Title *</label>
+                        <input type="text" id="event-title" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Description *</label>
+                        <textarea id="event-description" class="form-control" rows="4" required
+                            placeholder="Describe your event in detail..."></textarea>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Event Date *</label>
+                            <input type="date" id="event-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Time *</label>
+                            <input type="time" id="event-time" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <input type="text" id="event-location" class="form-control" required
+                                placeholder="Venue name and address">
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="event-category" class="form-control" required>
+                                <option value="">Select category</option>
+                                <option value="music">Music</option>
+                                <option value="art">Art</option>
+                                <option value="dance">Dance</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="workshop">Workshop</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Ticket Price (₹) *</label>
+                            <input type="number" id="event-price" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Maximum Participants *</label>
+                            <input type="number" id="event-capacity" class="form-control" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Event Image URL</label>
+                        <input type="url" id="event-image" class="form-control"
+                            placeholder="https://example.com/image.jpg">
+                        <small>Optional: Add a URL to an image that represents your event</small>
+                    </div>
+
+                    <h3>Contact Information</h3>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Your Name *</label>
+                            <input type="text" id="organizer-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="organizer-email" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="organizer-phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Organization (Optional)</label>
+                            <input type="text" id="organizer-org" class="form-control">
+                        </div>
+                    </div>
+
+                    <h3>Additional Details</h3>
+
+                    <div class="form-group">
+                        <label>Special Requirements</label>
+                        <textarea id="event-requirements" class="form-control" rows="3"
+                            placeholder="Any special equipment, setup requirements, or accessibility needs..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Refund Policy</label>
+                        <select id="refund-policy" class="form-control">
+                            <option value="full">Full refund up to 48 hours before</option>
+                            <option value="partial">50% refund up to 24 hours before</option>
+                            <option value="none">No refunds</option>
+                            <option value="custom">Custom policy (specify in requirements)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="terms-agreement" required>
+                            I agree to the <a href="#" onclick="showTerms()">Event Hosting Terms and Conditions</a> *
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="marketing-consent">
+                            I consent to Elysian Spectacle promoting my event through email and social media
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Event for Review</button>
+                </form>
+            </div>
+
+            <div class="card mt-2">
+                <h3>Event Submission Process</h3>
+                <div class="grid grid-3">
+                    <div class="text-center">
+                        <h4>1. Submit</h4>
+                        <p>Fill out the form with your event details</p>
+                    </div>
+                    <div class="text-center">
+                        <h4>2. Review</h4>
+                        <p>Our team reviews your submission within 48 hours</p>
+                    </div>
+                    <div class="text-center">
+                        <h4>3. Publish</h4>
+                        <p>Once approved, your event goes live on our platform</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elysian Spectacle</h4>
+                    <p>Connecting audiences with unforgettable cultural experiences worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Set minimum date to today
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('event-date').min = today;
+
+            // Auto-fill organizer info if user is logged in
+            const user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser') || '{}');
+            if (user.email) {
+                document.getElementById('organizer-name').value = user.name || '';
+                document.getElementById('organizer-email').value = user.email || '';
+                document.getElementById('organizer-phone').value = user.phone || '';
+            }
+        });
+
+        function submitEvent(e) {
+            e.preventDefault();
+
+            // Get form data
+            const eventData = {
+                title: document.getElementById('event-title').value,
+                description: document.getElementById('event-description').value,
+                date: document.getElementById('event-date').value,
+                time: document.getElementById('event-time').value,
+                location: document.getElementById('event-location').value,
+                category: document.getElementById('event-category').value,
+                price: parseInt(document.getElementById('event-price').value),
+                capacity: parseInt(document.getElementById('event-capacity').value),
+                image: document.getElementById('event-image').value,
+                organizerName: document.getElementById('organizer-name').value,
+                organizerEmail: document.getElementById('organizer-email').value,
+                organizerPhone: document.getElementById('organizer-phone').value,
+                organizerOrg: document.getElementById('organizer-org').value,
+                requirements: document.getElementById('event-requirements').value,
+                refundPolicy: document.getElementById('refund-policy').value,
+                marketingConsent: document.getElementById('marketing-consent').checked,
+                status: 'pending',
+                submittedAt: new Date().toISOString(),
+                id: Date.now()
+            };
+
+            // Store the event submission
+            const existingSubmissions = JSON.parse(localStorage.getItem('eventSubmissions') || '[]');
+            existingSubmissions.push(eventData);
+            localStorage.setItem('eventSubmissions', JSON.stringify(existingSubmissions));
+
+            showAlert('Event submitted successfully! You will receive an email confirmation within 24 hours.', 'success');
+
+            // Reset form
+            setTimeout(() => {
+                document.getElementById('host-event-form').reset();
+                window.location.href = 'events.html';
+            }, 3000);
+        }
+
+        function showAlert(message, type) {
+            const alertsDiv = document.getElementById('host-alerts');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertsDiv.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 8000);
+        }
+
+        function showTerms() {
+            alert(`Event Hosting Terms and Conditions:
+
+1. Event organizers are responsible for all aspects of event planning and execution
+2. Elysian Spectacle charges a 10% platform fee on ticket sales
+3. Events must comply with local laws and regulations
+4. Organizers must provide accurate information about their events
+5. Elysian Spectacle reserves the right to remove events that violate guidelines
+6. Payment processing fees may apply
+7. Organizers are responsible for event cancellation policies
+8. Events must be suitable for public audiences
+
+(This is a demo version - full terms would be provided)`);
+        }
+
+        // Form validation
+        document.getElementById('event-date').addEventListener('change', function () {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                showAlert('Event date cannot be in the past', 'error');
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

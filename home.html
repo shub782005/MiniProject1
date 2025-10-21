@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Elysian Spectacle - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+    <canvas id="three-bg"></canvas>
+
+    <header>
+        <nav class="container">
+            <a href="home.html" class="logo">Elysian Spectacle</a>
+
+            <ul class="nav-links">
+                <li><a href="home.html" class="active">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Artists</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                <button class="btn btn-secondary" onclick="window.location.href='login.html'">Login</button>
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Immerse in Live Music, Art & Culture</h1>
+            <p>Explore curated events from around the world. Use the vibrant filters, register for events, and keep
+                tickets in your user profile.</p>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterEvents('all')">All</button>
+                <button class="filter-btn" onclick="filterEvents('music')">Music</button>
+                <button class="filter-btn" onclick="filterEvents('art')">Art</button>
+                <button class="filter-btn" onclick="filterEvents('dance')">Dance</button>
+                <button class="filter-btn" onclick="filterEvents('comedy')">Comedy</button>
+                <button class="filter-btn" onclick="filterEvents('workshop')">Workshop</button>
+            </div>
+        </section>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="total-events">0</h3>
+                <p>Events</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-artists">0</h3>
+                <p>Artists</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="total-users">0</h3>
+                <p>Users</p>
+            </div>
+        </div>
+
+        <section>
+            <h2>Featured Events</h2>
+            <p>Check out some of our most popular upcoming events.</p>
+            <div id="featured-events" class="grid grid-3">
+                <!-- Events will be populated here -->
+            </div>
+        </section>
+
+        <section>
+            <h2>Meet the Artists</h2>
+            <p>Discover the talented individuals behind the magic.</p>
+            <div id="featured-artists" class="grid grid-3">
+                <!-- Artists will be populated here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elysian Spectacle</h4>
+                    <p>Connecting audiences with unforgettable cultural experiences worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <p><a href="events.html">Browse Events</a></p>
+                    <p><a href="artists.html">Meet Artists</a></p>
+                    <p><a href="host-event.html">Host Event</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <p><a href="contact.html">Contact Us</a></p>
+                    <p><a href="#">Help Center</a></p>
+                    <p><a href="#">Terms of Service</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <p><a href="#">Twitter</a></p>
+                    <p><a href="#">Instagram</a></p>
+                    <p><a href="#">Facebook</a></p>
+                </div>
+            </div>
+            <div class="text-center mt-2">
+                <p>&copy; 2024 Elysian Spectacle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize home page
+        document.addEventListener('DOMContentLoaded', function () {
+            initThreeJS();
+            updateStats();
+            renderEvents();
+            renderArtists();
+        });
+    </script>
+</body>
+
+</html>
